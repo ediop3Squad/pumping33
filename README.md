@@ -1,6 +1,6 @@
 # pumping33
 Pumping33
-Pumping33 is a Wi-Fi password cracking tool that allows users to capture packets, perform dictionary attacks on WPA/WPA2 handshakes, and attempt to crack the Wi-Fi password. This tool is intended for educational and security research purposes only. Misuse of this tool could result in legal consequences.
+Pumping33 is a Wi-Fi password cracking tool that allows users to capture packets, perform dictionary attacks on WPA/WPA2 handshakes, and attempt to crack the Wi-Fi password.
 
 Table of Contents
 Installation
