@@ -1,4 +1,4 @@
-# pumping33 ![Uploading image.png…]()
+# pumping33 ![image.png…]()
 
 Pumping33
 Pumping33 is a Wi-Fi password cracking tool that allows users to capture packets, perform dictionary attacks on WPA/WPA2 handshakes, and attempt to crack the Wi-Fi password.
