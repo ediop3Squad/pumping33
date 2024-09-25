@@ -1,4 +1,5 @@
-# pumping33 https://raw.githubusercontent.com/ediop3Squad/pumping33/refs/heads/main/974ad8a8-a893-45cc-b72e-4fb5c894ef37.webp
+# pumping33 ![Uploading image.png…]()
+
 Pumping33
 Pumping33 is a Wi-Fi password cracking tool that allows users to capture packets, perform dictionary attacks on WPA/WPA2 handshakes, and attempt to crack the Wi-Fi password.
 
