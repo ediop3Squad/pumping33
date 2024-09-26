@@ -5,7 +5,6 @@ from scapy.all import *
 import threading
 from hashlib import pbkdf2_hmac
 import hmac
-from Crypto.Cipher import AES
 
 # Global variables
 target_network = None
@@ -41,20 +40,12 @@ def scan_networks(interface):
         if packet.haslayer(Dot11Beacon):
             ssid = packet.info.decode() if packet.info else 'Hidden SSID'
             bssid = packet.addr2
-            mac = packet.addr2  # BSSID is the same as MAC in this context
-            client_mac = '00:11:22:33:44:55'  # Placeholder for client MAC address (you can modify this as needed)
-            anonce = 'aabbccddeeff00112233445566778899'  # Placeholder for ANonce
-            snonce = '00112233445566778899aabbccddeeff'  # Placeholder for SNonce
             if ssid not in [net['SSID'] for net in available_networks]:
                 available_networks.append({
                     'SSID': ssid,
                     'BSSID': bssid,
-                    'MAC': mac,
-                    'Client_MAC': client_mac,
-                    'ANonce': anonce,
-                    'SNonce': snonce
                 })
-                print(f"Found SSID: {ssid} (BSSID: {bssid}, MAC: {mac}, Client MAC: {client_mac}, ANonce: {anonce}, SNonce: {snonce})")
+                print(f"Found SSID: {ssid} (BSSID: {bssid})")
 
     sniff(iface=interface, prn=packet_handler, store=0, timeout=10)
 
@@ -124,21 +115,19 @@ def main():
 
     interfaces = get_network_interfaces()
 
-    # Step 1: Choose an interface (wlan0 or eth0)
+    # Step 1: Choose an interface (including eth0, wlan0, lo, eth0@if5)
     print("Available Interfaces:")
-    print("1: wlan0 (Wi-Fi)")
-    print("2: eth0 (Ethernet)")
-    choice = input("Select an interface (1 or 2): ").strip()
+    for idx, iface in enumerate(interfaces, 1):
+        print(f"{idx}: {iface}")
+    choice = input("Select an interface by number: ").strip()
 
-    if choice == "1":
-        selected_iface = "wlan0"
-    elif choice == "2":
-        selected_iface = "eth0"
-    else:
+    try:
+        selected_iface = interfaces[int(choice) - 1]
+    except (IndexError, ValueError):
         print("Invalid selection. Exiting.")
         return
 
-    if selected_iface == "wlan0":
+    if selected_iface.startswith("wlan"):
         # Step 2: Scan for Wi-Fi networks
         scan_networks(selected_iface)
 
@@ -149,7 +138,7 @@ def main():
         # Step 3: List available networks and select one
         print("\nAvailable Networks:")
         for idx, network in enumerate(available_networks, 1):
-            print(f"{idx}: SSID: {network['SSID']} (BSSID: {network['BSSID']}, MAC: {network['MAC']}, Client MAC: {network['Client_MAC']}, ANonce: {network['ANonce']}, SNonce: {network['SNonce']})")
+            print(f"{idx}: SSID: {network['SSID']} (BSSID: {network['BSSID']})")
 
         selected_network = input(f"Select a network (1-{len(available_networks)}): ").strip()
         try:
@@ -182,6 +171,10 @@ def main():
                            bytes.fromhex(client_mac.replace(":", "")),
                            bytes.fromhex(anonce.replace(":", "")),
                            bytes.fromhex(snonce.replace(":", "")))
+
+    elif selected_iface.startswith("eth") or selected_iface == "lo":
+        print(f"{selected_iface} selected. Scanning is not applicable for this interface.")
+        # You can implement further logic for Ethernet and loopback interfaces if needed.
 
 if __name__ == "__main__":
     main()
