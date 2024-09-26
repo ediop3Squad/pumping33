@@ -1,6 +1,14 @@
 # pumping33 ![image](https://github.com/user-attachments/assets/5b555105-ea81-4e9b-873a-5171778e32a7)
 
 
+The interface wlan0 is not available, as per the script output. The script lists two available interfaces:
+
+lo (loopback interface)
+eth0@if5
+
+if requirements.txt aint workin try "sudo apt install python3-scapy"
+
+
 Pumping33
 Pumping33 is a Wi-Fi password cracking tool that allows users to capture packets, perform dictionary attacks on WPA/WPA2 handshakes, and attempt to crack the Wi-Fi password.
 
