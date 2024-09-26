@@ -5,6 +5,7 @@ from scapy.all import *
 import threading
 from hashlib import pbkdf2_hmac
 import hmac
+from Crypto.Cipher import AES
 
 # Global variables
 target_network = None
@@ -40,10 +41,11 @@ def scan_networks(interface):
         if packet.haslayer(Dot11Beacon):
             ssid = packet.info.decode() if packet.info else 'Hidden SSID'
             bssid = packet.addr2
+            # Removed unused placeholders
             if ssid not in [net['SSID'] for net in available_networks]:
                 available_networks.append({
                     'SSID': ssid,
-                    'BSSID': bssid,
+                    'BSSID': bssid
                 })
                 print(f"Found SSID: {ssid} (BSSID: {bssid})")
 
@@ -115,7 +117,7 @@ def main():
 
     interfaces = get_network_interfaces()
 
-    # Step 1: Choose an interface (including eth0, wlan0, lo, eth0@if5)
+    # Step 1: Choose an interface (wlan0 or eth0)
     print("Available Interfaces:")
     for idx, iface in enumerate(interfaces, 1):
         print(f"{idx}: {iface}")
@@ -172,9 +174,9 @@ def main():
                            bytes.fromhex(anonce.replace(":", "")),
                            bytes.fromhex(snonce.replace(":", "")))
 
-    elif selected_iface.startswith("eth") or selected_iface == "lo":
-        print(f"{selected_iface} selected. Scanning is not applicable for this interface.")
-        # You can implement further logic for Ethernet and loopback interfaces if needed.
+    elif selected_iface.startswith("eth"):
+        print("Ethernet interface selected. Scanning is not supported for wired networks.")
+        # You can implement further logic for Ethernet interface if needed.
 
 if __name__ == "__main__":
     main()
